@@ -9,22 +9,31 @@ module Marqeta
     end
 
     def get
-      logger.info("GET: #{endpoint}")
-      begin
-        response = resource.get
-        handle_successful_response response
-      rescue RestClient::ExceptionWithResponse => e
-        handle_exception_with_response e
-      rescue *HttpError::ERROR_LIST => e
-        handle_http_error e
+      api_call_block do
+        logger.info("GET: #{endpoint}")
+        resource.get
       end
     end
 
     def post(payload)
-      json_payload = payload.to_json
-      logger.info "POST: #{endpoint}, #{json_payload}"
+      api_call_block do
+        json_payload = payload.to_json
+        logger.info "POST: #{endpoint}, #{json_payload}"
+        resource.post(json_payload, content_type: 'application/json')
+      end
+    end
+
+    def put(payload)
+      api_call_block do
+        json_payload = payload.to_json
+        logger.info "PUT: #{endpoint}, #{json_payload}"
+        resource.put(json_payload, content_type: 'application/json')
+      end
+    end
+
+    def api_call_block
       begin
-        response = resource.post(json_payload, content_type: 'application/json')
+        response = yield
         handle_successful_response response
       rescue RestClient::ExceptionWithResponse => e
         handle_exception_with_response e
