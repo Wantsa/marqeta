@@ -1,3 +1,8 @@
+require 'marqeta/api_caller'
+require 'marqeta/api_object'
+require 'marqeta/gateway_response_codes'
+require 'marqeta/transaction_response_codes'
+
 module Marqeta
   class Transaction < ApiObject
     PENDING_STATE = 'PENDING'.freeze
@@ -83,6 +88,11 @@ module Marqeta
       CardAcceptor.new(card_acceptor_hash['name'])
     end
 
+    def channel
+      # channel field is not always sent in transaction
+      poi_hash['channel']
+    end
+
     def force_capture?
       method == FORCE_CAPTURE_METHOD
     end
@@ -95,6 +105,10 @@ module Marqeta
 
     def card_acceptor_hash
       attributes_hash['card_acceptor']
+    end
+
+    def poi_hash
+      card_acceptor_hash.fetch('poi')
     end
 
     def gateway_log

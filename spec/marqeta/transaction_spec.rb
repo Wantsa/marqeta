@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Marqeta::Transaction do
   describe 'class methods' do
     describe '.index' do
@@ -64,7 +62,8 @@ describe Marqeta::Transaction do
         expect(transactions.map(&:state)).to eq(%w[PENDING DECLINED])
         expect(transactions.map(&:user_token)).to eq(%w[user_token1 user_token2])
         expect(transactions.map(&:amount)).to eq([1000, 2000])
-        expect(transactions.map(&:created_time)).to eq([Time.parse('2018-01-01T00:00:00Z'), Time.parse('2018-01-02T00:00:00Z')])
+        expect(transactions.map(&:created_time)).to eq([Time.parse('2018-01-01T00:00:00Z'),
+                                                        Time.parse('2018-01-02T00:00:00Z')])
         expect(transactions.map(&:card_acceptor).map(&:name)).to eq(%w[Marqeta Financeit])
       end
 
@@ -194,7 +193,10 @@ describe Marqeta::Transaction do
           'memo' => response_memo,
           'code' => response_code
         },
-        'gpa_order' => gpa_order
+        'gpa_order' => gpa_order,
+        'card_acceptor' => {
+          'poi' => poi
+        }
       )
     end
 
@@ -225,6 +227,10 @@ describe Marqeta::Transaction do
     let(:response_memo) { 'RANDOM_RESPONSE_MEMO' }
     let(:response_code) { 'RANDOM_RESPONSE_CODE' }
     let(:method) { 'RANDOM_METHOD' }
+
+    let(:poi) do
+      {}
+    end
 
     describe '#pending?' do
       context 'when state is not pending state' do
@@ -414,6 +420,26 @@ describe Marqeta::Transaction do
     describe '#response_memo' do
       it 'returns response memo' do
         expect(transaction.response_memo).to eq(response_memo)
+      end
+    end
+
+    describe '#channel' do
+      context 'when the channel is not present' do
+        it 'returns nil' do
+          expect(transaction.channel).to eq(nil)
+        end
+      end
+
+      context 'when the channel is present' do
+        let(:poi) do
+          {
+            'channel' => 'RANDOM_CHANNEL'
+          }
+        end
+
+        it 'returns the channel' do
+          expect(transaction.channel).to eq('RANDOM_CHANNEL')
+        end
       end
     end
 

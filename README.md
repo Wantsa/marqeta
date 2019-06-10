@@ -1,5 +1,5 @@
 [ ![Codeship Status for
-financeit/marqeta](https://app.codeship.com/projects/b9d56aa0-fec3-0135-5a6d-462e71abe528/status?branch=master)](https://app.codeship.com/projects/279548)
+financeit/marqeta](https://app.codeship.com/projects/c728ce40-d950-0136-6a02-660e8e347b40/status?branch=master)](https://app.codeship.com/projects/317336)
 
 # Marqeta
 
@@ -10,8 +10,10 @@ An API client library for the [Marqeta API][marqeta_api].
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'marqeta'
+gem 'marqeta', github: 'financeit/marqeta'
 ```
+
+(The gem has not yet been released on rubygems.org)
 
 And then execute:
 
@@ -40,6 +42,10 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run 
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
+## See Also
+
+* https://github.com/marqeta/marqeta-python (official Marqeta client for python)
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/financeit/marqeta.
@@ -50,4 +56,4 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/financ
 
 [marqeta_api]: https://www.marqeta.com/api
 [financeit]: https://www.financeit.io/
-[hiring]: https://www.financeit.io/ca/en/careers
+[hiring]: https://www.financeit.io/careers

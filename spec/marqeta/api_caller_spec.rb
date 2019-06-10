@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Marqeta::ApiCaller do
   subject(:api_caller) { Marqeta::ApiCaller.new(endpoint, params) }
 
@@ -24,31 +22,30 @@ describe Marqeta::ApiCaller do
   end
 
   describe '#get' do
-    let(:get) { api_caller.get }
+    let(:resource) { instance_double(RestClient::Resource) }
 
     before do
-      allow_any_instance_of(RestClient::Resource)
-        .to(receive(:get))
-        .and_return(response_hash.to_json)
+      allow(RestClient::Resource).to receive(:new).and_return(resource)
+      allow(resource).to receive(:get).and_return(response_hash.to_json)
     end
 
     it 'sends correct get request to the RestClient Resource' do
-      expect_any_instance_of(RestClient::Resource).to receive(:get)
-      get
+      expect(resource).to receive(:get)
+      api_caller.get
     end
 
     it 'returns parsed JSON response' do
-      expect(get).to eq(response_hash)
+      result = api_caller.get
+      expect(result).to eq(response_hash)
     end
 
     it 'logs the request and response' do
       expect(Marqeta.configuration.logger).to(receive(:info)).twice
-      get
+      api_caller.get
     end
   end
 
   describe '#post' do
-    let(:post) { api_caller.post(payload) }
     let(:payload) { { 'foo' => 'bar', 'biz' => 'baz' } }
 
     before do
@@ -61,16 +58,17 @@ describe Marqeta::ApiCaller do
       expect_any_instance_of(RestClient::Resource)
         .to receive(:post)
         .with(payload.to_json, content_type: 'application/json')
-      post
+      api_caller.post(payload)
     end
 
     it 'returns parsed JSON response' do
-      expect(post).to eq(response_hash)
+      result = api_caller.post(payload)
+      expect(result).to eq(response_hash)
     end
 
     it 'logs the request and response' do
       expect(Marqeta.configuration.logger).to(receive(:info)).twice
-      post
+      api_caller.post(payload)
     end
   end
 end
