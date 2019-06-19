@@ -1,11 +1,9 @@
-# frozen_string_literal: true
-
 require 'marqeta/api_object'
 
 module Marqeta
-  class Ping < ApiObject
+  class CardProduct < ApiObject
     def self.endpoint
-      'ping'
+      'cardproducts'
     end
   end
 end
