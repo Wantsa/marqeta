@@ -14,6 +14,11 @@ module Marqeta
       new(token: result['card_token'])
     end
 
+    def self.from_barcode(barcode, fields)
+      result = ApiCaller.new("cards/barcode/#{barcode}", fields)
+      new(token: result['token'])
+    end
+
     def active?
       state == ACTIVE_STATE && Time.now < expiration_time
     end
