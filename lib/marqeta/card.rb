@@ -15,7 +15,7 @@ module Marqeta
     end
 
     def self.from_barcode(barcode, fields)
-      result = ApiCaller.new("cards/barcode/#{barcode}", fields)
+      result = ApiCaller.new("cards/barcode/#{barcode}", fields).get
       new(token: result['token'])
     end
 
